@@ -6,14 +6,21 @@ export const handleUserMessage = async (req: Request, res: Response) => {
     const { message, sessionId } = req.body;
 
     if (!message || !sessionId) {
-      return res.status(400).json({ error: 'Mensagem e sessionId são obrigatórios.' });
+      return res.status(400).json({ 
+        type: 'fallback',
+        message: 'Mensagem prévia e sessionId são obrigatórios para continuar.' 
+      });
     }
 
-    const responseMessage = processUserMessage(message, sessionId);
+    const structuredApiResponse = await processUserMessage(message, sessionId);
     
-    return res.json({ response: responseMessage });
-  } catch (error) {
+    return res.json(structuredApiResponse);
+
+  } catch (error: any) {
     console.error('Erro no handleUserMessage:', error);
-    return res.status(500).json({ error: 'Erro ao processar a mensagem.' });
+    return res.status(500).json({ 
+      type: 'fallback',
+      message: 'Desculpe, não consegui entender sua pergunta agora. Por favor, tente novamente ou reformule sua dúvida.' 
+    });
   }
 };
