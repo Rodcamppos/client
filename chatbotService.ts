@@ -1,4 +1,3 @@
-// Controle de sessões simples em memória
 const sessions: Record<string, { lastMessage: string }> = {};
 
 const responses = {
@@ -7,7 +6,6 @@ const responses = {
   goodbye: ['tchau', 'até logo', 'até mais'],
 };
 
-// Agora a função recebe também o sessionId
 export function processUserMessage(message: string, sessionId: string): string {
   if (!sessionId) {
     return 'Sessão inválida. Por favor, forneça um ID de sessão.';
@@ -15,15 +13,12 @@ export function processUserMessage(message: string, sessionId: string): string {
 
   const msg = message.toLowerCase();
 
-  // Inicializa a sessão se ainda não existir
   if (!sessions[sessionId]) {
     sessions[sessionId] = { lastMessage: '' };
   }
 
-  // Atualiza o último texto enviado nessa sessão
   sessions[sessionId].lastMessage = message;
 
-  // Lógica de resposta
   if (responses.greeting.some(word => msg.includes(word))) {
     return 'Olá! 👋 Como posso ajudar você?';
   }
